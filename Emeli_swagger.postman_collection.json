@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "4eef7b6a-3c1b-449e-a52a-fd9319e7c4da",
+		"name": "Emeli_swagger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26560505"
+	},
+	"item": [
+		{
+			"name": "Add Item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var respSize = pm.response.responseSize",
+							"var jsonData = pm.response.json();",
+							"",
+							"//Check Status code",
+							"pm.test(pm.response.code+\" Success \"+pm.response.status, function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+							"});",
+							"//Check time",
+							"pm.test(\"Response time \"+pm.response.responseTime+\"ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2500);",
+							"});",
+							"//Check size",
+							"pm.test(\"Response size: \"+respSize+\" Bytes\", function () {});",
+							"",
+							"//Check response data",
+							"//ID",
+							"pm.test(\"Not empty. ID: \"+jsonData.id, function () {",
+							"    pm.expect(pm.response).not.to.be.empty;",
+							"});",
+							"//Date",
+							"pm.test(\"Date: \"+jsonData.date+\"; Date_gmt: \"+jsonData.date_gmt, function () {",
+							"    pm.expect(jsonData.date).to.exist;",
+							"});",
+							"//Slug",
+							"pm.test(\"Slug: \"+jsonData.slug, function () {",
+							"    pm.expect(jsonData.slug).to.exist;",
+							"});",
+							"//Status",
+							"pm.test(\"Status: \"+jsonData.status, function () {",
+							"    pm.expect(jsonData.status).to.exist;",
+							"});",
+							"//Password",
+							"pm.test(\"Password: \"+jsonData.password, function () {",
+							"    pm.expect(jsonData.password).to.exist;",
+							"});",
+							"//Title",
+							"pm.test(\"Title: \"+jsonData.title.raw, function () {",
+							"    pm.expect(jsonData.title.raw).to.exist;",
+							"});",
+							"//Content",
+							"pm.test(\"Content: \"+jsonData.content.raw, function () {",
+							"    pm.expect(jsonData.content.raw).to.exist;",
+							"});",
+							"//Excerpt",
+							"pm.test(\"Excerpt: \"+jsonData.excerpt.raw, function () {",
+							"    pm.expect(jsonData.excerpt.raw).to.exist;",
+							"});",
+							"//Media",
+							"pm.test(\"Featured media: \"+jsonData.featured_media, function () {",
+							"    pm.expect(jsonData.featured_media).to.exist;",
+							"});",
+							"//Coment status",
+							"pm.test(\"Coment status: \"+jsonData.comment_status, function () {",
+							"    pm.expect(jsonData.comment_status).to.exist;",
+							"});",
+							"//Ping status",
+							"pm.test(\"Ping status: \"+jsonData.ping_status, function () {",
+							"    pm.expect(jsonData.ping_status).to.exist;",
+							"});",
+							"//Format",
+							"pm.test(\"Format: \"+jsonData.format, function () {",
+							"    pm.expect(jsonData.format).to.exist;",
+							"});",
+							"",
+							"pm.test(\"Test data type of the response\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.title.raw).to.be.a(\"string\");",
+							"  pm.expect(jsonData.author).to.be.a(\"number\");",
+							"  pm.expect(jsonData.content.raw).to.be.an(\"string\");",
+							"  //pm.expect(jsonData.website).to.be.undefined;",
+							"  //pm.expect(jsonData.email).to.be.null;",
+							"});",
+							"",
+							"//Header",
+							"pm.test(\"Content-Type is present and has expected value\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=UTF-8\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var status = Array(\"publish\", \"future\", \"draft\", \"pending\", \"private\", \"auto-draft\", \"wc-pending\", \"wc-processing\", \"wc-on-hold\", \"wc-completed\", \"wc-cancelled\", \"wc-refunded\", \"wc-failed\", \"wc-checkout-draft\");",
+							"var c_status = pm.environment.get(\"counter\");",
+							"",
+							"var com_stat = pm.environment.get(\"coment\");",
+							"var p_stat = pm.environment.get(\"ping\");",
+							"",
+							"var format = Array(\"standard\", \"aside\", \"chat\", \"gallery\", \"link\", \"image\", \"quote\", \"status\", \"video\", \"audio\");",
+							"var c_f = pm.environment.get(\"format1\");",
+							"",
+							"if (c_status < 13) { ",
+							"    ++c_status;",
+							"    } else {",
+							"        c_status = 0;",
+							"    }",
+							"",
+							"if (p_stat == \"open\") {",
+							"    p_stat = \"closed\";",
+							"    } else {",
+							"        p_stat = \"open\";",
+							"    }",
+							"",
+							"if (com_stat == \"open\") {",
+							"    com_stat = \"closed\";",
+							"    } else {",
+							"        com_stat = \"open\";",
+							"    }",
+							"",
+							"if (c_f < 9) {",
+							"    ++c_f;",
+							"    } else {",
+							"        c_f = 0;",
+							"    }",
+							"",
+							"pm.environment.set(\"format1\",c_f);",
+							"pm.environment.set(\"format2\",format[c_f]);",
+							"",
+							"pm.environment.set(\"coment\",com_stat);",
+							"pm.environment.set(\"ping\",p_stat);",
+							"",
+							"pm.environment.set(\"stts\",status[c_status]);",
+							"pm.environment.set(\"counter\", c_status);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{psswrd}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{login}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"slug\":\"{{$randomCountryCode}}\",\n    \"status\":\"{{stts}}\",\n    \"password\":\"{{$randomPassword}}\",\n    \"title\":\"{{$randomJobTitle}}\",\n    \"content\":\"{{$randomCompanyName}}\",\n    \"excerpt\":\"{{$randomCompanyName}}\",\n    \"featured_media\":\"{{$randomInt}}\",\n    \"comment_status\":\"{{coment}}\",\n    \"ping_status\":\"{{ping}}\",\n    \"format\":\"{{format2}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/wp/v2/posts",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"wp",
+						"v2",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
